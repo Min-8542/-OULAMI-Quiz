@@ -357,6 +357,10 @@ const vbars=(w,h,c)=>`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000
 const hbars=(w,h,c,extra="")=>`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${c.map((col,i)=>`<rect x="0" y="${i*h/c.length}" width="${w}" height="${h/c.length+.5}" fill="${col}"/>`).join("")}${extra}</svg>`;
 const S=(w,h,body)=>`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
 
+function starN(cx,cy,r,n,inner,rot=-90){const p=[];for(let i=0;i<n*2;i++){const a=(rot+i*180/n)*Math.PI/180;const rr=i%2?r*inner:r;p.push((cx+rr*Math.cos(a)).toFixed(3)+","+(cy+rr*Math.sin(a)).toFixed(3));}return p.join(" ");}
+const UJ=id=>`<clipPath id="ujs${id}"><rect width="60" height="30"/></clipPath><clipPath id="ujt${id}"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#ujs${id})"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#ujt${id})" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g>`;
+const nordic=(w,h,bg,x,y,t,cross,inner)=>`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><rect width="${w}" height="${h}" fill="${bg}"/><rect x="${x}" width="${t}" height="${h}" fill="${cross}"/><rect y="${y}" width="${w}" height="${t}" fill="${cross}"/>${inner?`<rect x="${x+t/4}" width="${t/2}" height="${h}" fill="${inner}"/><rect y="${y+t/4}" width="${w}" height="${t/2}" fill="${inner}"/>`:""}</svg>`;
+
 const FLAGS={
   japan:S(300,200,`<rect width="300" height="200" fill="#fff"/><circle cx="150" cy="100" r="60" fill="#BC002D"/>`),
   france:vbars(300,200,["#002654","#fff","#CE1126"]),
@@ -380,6 +384,29 @@ const FLAGS={
   morocco:S(300,200,`<rect width="300" height="200" fill="#C1272D"/><polygon points="${pentagram(150,103,52)}" fill="none" stroke="#006233" stroke-width="8" stroke-linejoin="miter"/>`),
   tanzania:S(300,200,`<polygon points="0,0 300,0 0,200" fill="#1EB53A"/><polygon points="300,0 300,200 0,200" fill="#00A3DD"/><line x1="-20" y1="213" x2="320" y2="-13" stroke="#FCD116" stroke-width="72"/><line x1="-20" y1="213" x2="320" y2="-13" stroke="#000" stroke-width="50"/>`),
   turkey:S(30,20,`<rect width="30" height="20" fill="#E30A17"/><circle cx="10" cy="10" r="5" fill="#fff"/><circle cx="11.25" cy="10" r="4" fill="#E30A17"/><polygon points="${starPts(15.6,10,2.5,180)}" fill="#fff"/>`)
+  ,norway:nordic(22,16,"#BA0C2F",6,6,4,"#fff","#00205B"),
+  finland:nordic(18,11,"#fff",5,4,3,"#002F6C"),
+  denmark:nordic(37,28,"#C8102E",12,12,4,"#fff"),
+  iceland:nordic(25,18,"#02529C",7,7,4,"#fff","#DC1E35"),
+  belgium:vbars(15,13,["#000","#FDDA24","#EF3340"]),
+  hungary:hbars(300,150,["#CE2939","#fff","#477050"]),
+  czechia:S(300,200,`<rect width="300" height="100" fill="#fff"/><rect y="100" width="300" height="100" fill="#D7141A"/><polygon points="0,0 150,100 0,200" fill="#11457E"/>`),
+  ukraine:hbars(300,200,["#0057B7","#FFD700"]),
+  chile:S(300,200,`<rect width="300" height="100" fill="#fff"/><rect y="100" width="300" height="100" fill="#D52B1E"/><rect width="100" height="100" fill="#0039A6"/><polygon points="${starPts(50,52,30)}" fill="#fff"/>`),
+  colombia:S(300,200,`<rect width="300" height="100" fill="#FCD116"/><rect y="100" width="300" height="50" fill="#003893"/><rect y="150" width="300" height="50" fill="#CE1126"/>`),
+  cuba:S(200,100,[0,1,2,3,4].map(i=>`<rect y="${i*20}" width="200" height="20.5" fill="${i%2?'#fff':'#002A8F'}"/>`).join("")+`<polygon points="0,0 86.6,50 0,100" fill="#CF142B"/><polygon points="${starPts(29,51,15)}" fill="#fff"/>`),
+  peru:vbars(300,200,["#D91023","#fff","#D91023"]),
+  argentina:hbars(400,250,["#74ACDF","#fff","#74ACDF"],`<polygon points="${starN(200,125,34,16,.62)}" fill="#F6B40E"/><circle cx="200" cy="125" r="18" fill="#F6B40E" stroke="#85340A" stroke-width="1.5"/>`),
+  india:hbars(300,200,["#FF9933","#fff","#138808"],`<circle cx="150" cy="100" r="28" fill="none" stroke="#000080" stroke-width="4"/><circle cx="150" cy="100" r="5" fill="#000080"/>`+Array.from({length:12},(_,i)=>{const a=i*15*Math.PI/180;return `<line x1="${(150-26*Math.cos(a)).toFixed(2)}" y1="${(100-26*Math.sin(a)).toFixed(2)}" x2="${(150+26*Math.cos(a)).toFixed(2)}" y2="${(100+26*Math.sin(a)).toFixed(2)}" stroke="#000080" stroke-width="1.6"/>`;}).join("")),
+  canada:S(9600,4800,`<rect width="9600" height="4800" fill="#D52B1E"/><rect x="2400" width="4800" height="4800" fill="#fff"/><path fill="#D52B1E" d="m4890 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/>`),
+  australia:S(120,60,`<rect width="120" height="60" fill="#012169"/>${UJ("au")}<g fill="#fff"><polygon points="${starN(30,45,9,7,.44)}"/><polygon points="${starN(90,50.5,4.6,7,.44)}"/><polygon points="${starN(90,9.5,4.6,7,.44)}"/><polygon points="${starN(76,26,4.6,7,.44)}"/><polygon points="${starN(103.5,22.5,4.6,7,.44)}"/><polygon points="${starN(97,31.5,2.6,5,.4)}"/></g>`),
+  newzealand:S(120,60,`<rect width="120" height="60" fill="#012169"/>${UJ("nz")}<g fill="#C8102E" stroke="#fff" stroke-width="1.1" stroke-linejoin="miter"><polygon points="${starPts(90,12,3.6)}"/><polygon points="${starPts(101.5,24.5,3.4)}"/><polygon points="${starPts(80,28,3.8)}"/><polygon points="${starPts(90,48.5,4.3)}"/></g>`),
+  uae:S(400,200,`<rect width="400" height="67" fill="#00843D"/><rect y="66.5" width="400" height="67" fill="#fff"/><rect y="133" width="400" height="67" fill="#000"/><rect width="100" height="200" fill="#EF3340"/>`),
+  cameroon:vbars(300,200,["#007A5E","#CE1126","#FCD116"]).replace("</svg>",`<polygon points="${starPts(150,103,30)}" fill="#FCD116"/></svg>`),
+  pakistan:S(300,200,`<rect width="300" height="200" fill="#01411C"/><rect width="75" height="200" fill="#fff"/><circle cx="187" cy="100" r="62" fill="#fff"/><circle cx="206" cy="86" r="55" fill="#01411C"/><polygon points="${starPts(220,74,21,-58)}" fill="#fff"/>`),
+  laos:S(300,200,`<rect width="300" height="200" fill="#CE1126"/><rect y="50" width="300" height="100" fill="#002868"/><circle cx="150" cy="100" r="40" fill="#fff"/>`),
+  ghana:hbars(300,200,["#CE1126","#FCD116","#006B3F"],`<polygon points="${starPts(150,104,33)}" fill="#000"/>`),
+  benin:S(300,200,`<rect width="300" height="200" fill="#FCD116"/><rect y="100" width="300" height="100" fill="#E8112D"/><rect width="120" height="200" fill="#008751"/>`)
 };
 
 /* ---------- question pools ---------- */
@@ -400,7 +427,21 @@ const POOL={
     {f:"ireland",c:"아일랜드",a:"더블린",o:["코크","골웨이","벨파스트"]},
     {f:"vietnam",c:"베트남",a:"하노이",o:["호찌민","다낭","하이퐁"]},
     {f:"poland",c:"폴란드",a:"바르샤바",o:["크라쿠프","그단스크","브로츠와프"]},
-    {f:"bangladesh",c:"방글라데시",a:"다카",o:["치타공","쿨나","실헷"]}
+    {f:"bangladesh",c:"방글라데시",a:"다카",o:["치타공","쿨나","실헷"]},
+    {f:"norway",c:"노르웨이",a:"오슬로",o:["베르겐","트론헤임","스타방에르"]},
+    {f:"finland",c:"핀란드",a:"헬싱키",o:["탐페레","투르쿠","오울루"]},
+    {f:"denmark",c:"덴마크",a:"코펜하겐",o:["오르후스","오덴세","올보르"]},
+    {f:"iceland",c:"아이슬란드",a:"레이캬비크",o:["아퀴레이리","셀포스","케플라비크"]},
+    {f:"belgium",c:"벨기에",a:"브뤼셀",o:["안트베르펜","겐트","브뤼헤"]},
+    {f:"hungary",c:"헝가리",a:"부다페스트",o:["데브레첸","세게드","죄르"]},
+    {f:"czechia",c:"체코",a:"프라하",o:["브르노","오스트라바","플젠"]},
+    {f:"ukraine",c:"우크라이나",a:"키이우",o:["리비우","오데사","하르키우"]},
+    {f:"chile",c:"칠레",a:"산티아고",o:["발파라이소","콘셉시온","안토파가스타"]},
+    {f:"colombia",c:"콜롬비아",a:"보고타",o:["메데인","칼리","카르타헤나"]},
+    {f:"cuba",c:"쿠바",a:"아바나",o:["산티아고데쿠바","바라데로","카마구에이"]},
+    {f:"peru",c:"페루",a:"리마",o:["쿠스코","아레키파","트루히요"]},
+    {f:"argentina",c:"아르헨티나",a:"부에노스아이레스",o:["코르도바","로사리오","멘도사"]},
+    {f:"india",c:"인도",a:"뉴델리",o:["뭄바이","콜카타","벵갈루루"]}
   ],
   h:[
     {f:"switzerland",c:"스위스",a:"베른",o:["취리히","제네바","바젤"]},
@@ -410,7 +451,16 @@ const POOL={
     {f:"myanmar",c:"미얀마",a:"네피도",o:["양곤","만달레이","바고"]},
     {f:"brazil",c:"브라질",a:"브라질리아",o:["리우데자네이루","상파울루","살바도르"]},
     {f:"morocco",c:"모로코",a:"라바트",o:["카사블랑카","마라케시","페스"]},
-    {f:"tanzania",c:"탄자니아",a:"도도마",o:["다르에스살람","아루샤","잔지바르"]}
+    {f:"tanzania",c:"탄자니아",a:"도도마",o:["다르에스살람","아루샤","잔지바르"]},
+    {f:"canada",c:"캐나다",a:"오타와",o:["토론토","밴쿠버","몬트리올"]},
+    {f:"australia",c:"호주",a:"캔버라",o:["시드니","멜버른","브리즈번"]},
+    {f:"newzealand",c:"뉴질랜드",a:"웰링턴",o:["오클랜드","크라이스트처치","퀸스타운"]},
+    {f:"uae",c:"아랍에미리트",a:"아부다비",o:["두바이","샤르자","알아인"]},
+    {f:"cameroon",c:"카메룬",a:"야운데",o:["두알라","가루아","바푸삼"]},
+    {f:"pakistan",c:"파키스탄",a:"이슬라마바드",o:["카라치","라호르","페샤와르"]},
+    {f:"laos",c:"라오스",a:"비엔티안",o:["루앙프라방","팍세","사반나켓"]},
+    {f:"ghana",c:"가나",a:"아크라",o:["쿠마시","타말레","케이프코스트"]},
+    {f:"benin",c:"베냉",a:"포르토노보",o:["코토누","파라쿠","아보메이"]}
   ]
 };
 const LEVEL={e:{name:"난이도 하",pt:1},m:{name:"난이도 중",pt:2},h:{name:"난이도 상",pt:3}};
@@ -426,7 +476,9 @@ const CITY={
   "도쿄":[35.68,139.69],"파리":[48.86,2.35],"로마":[41.9,12.5],"베를린":[52.52,13.4],"모스크바":[55.76,37.62],"방콕":[13.76,100.5],
   "암스테르담":[52.37,4.9],"빈":[48.21,16.37],"스톡홀름":[59.33,18.07],"아테네":[37.98,23.73],"더블린":[53.35,-6.26],"하노이":[21.03,105.85],
   "바르샤바":[52.23,21.01],"다카":[23.81,90.41],"베른":[46.95,7.45],"앙카라":[39.93,32.86],"아부자":[9.08,7.4],"야무수크로":[6.83,-5.29],
-  "네피도":[19.76,96.08],"브라질리아":[-15.79,-47.88],"라바트":[34.02,-6.83],"도도마":[-6.16,35.75]
+  "네피도":[19.76,96.08],"브라질리아":[-15.79,-47.88],"라바트":[34.02,-6.83],"도도마":[-6.16,35.75],
+  "오슬로":[59.91,10.75],"헬싱키":[60.17,24.94],"코펜하겐":[55.68,12.57],"레이캬비크":[64.15,-21.94],"브뤼셀":[50.85,4.35],"부다페스트":[47.5,19.04],"프라하":[50.08,14.44],"키이우":[50.45,30.52],"산티아고":[-33.45,-70.67],"보고타":[4.71,-74.07],"아바나":[23.11,-82.37],"리마":[-12.05,-77.04],"부에노스아이레스":[-34.6,-58.38],"뉴델리":[28.61,77.21],
+  "오타와":[45.42,-75.7],"캔버라":[-35.28,149.13],"웰링턴":[-41.29,174.78],"아부다비":[24.45,54.38],"야운데":[3.85,11.5],"이슬라마바드":[33.69,73.05],"비엔티안":[17.98,102.63],"아크라":[5.6,-0.19],"포르토노보":[6.5,2.6]
 };
 const DECOR=[[38.9,-77.04],[45.42,-75.7],[19.43,-99.13],[-34.6,-58.38],[-12.05,-77.04],[4.71,-74.07],[-33.45,-70.67],[23.11,-82.37],[64.15,-21.94],
   [-35.28,149.13],[-41.29,174.78],[28.61,77.21],[39.9,116.4],[-6.2,106.85],[14.6,120.98],[30.04,31.24],[-1.29,36.82],[-25.75,28.19],[24.71,46.68],
@@ -438,7 +490,7 @@ const SEOUL=[37.57,126.98];
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const D2R=Math.PI/180;
 const HAS_D3=typeof d3!=="undefined"&&typeof topojson!=="undefined";
-const ISO={"도쿄":"392","파리":"250","로마":"380","베를린":"276","모스크바":"643","방콕":"764","암스테르담":"528","빈":"040","스톡홀름":"752","아테네":"300","더블린":"372","하노이":"704","바르샤바":"616","다카":"050","베른":"756","앙카라":"792","아부자":"566","야무수크로":"384","네피도":"104","브라질리아":"076","라바트":"504","도도마":"834"};
+const ISO={"도쿄":"392","파리":"250","로마":"380","베를린":"276","모스크바":"643","방콕":"764","암스테르담":"528","빈":"040","스톡홀름":"752","아테네":"300","더블린":"372","하노이":"704","바르샤바":"616","다카":"050","베른":"756","앙카라":"792","아부자":"566","야무수크로":"384","네피도":"104","브라질리아":"076","라바트":"504","도도마":"834","오슬로":"578","헬싱키":"246","코펜하겐":"208","레이캬비크":"352","브뤼셀":"056","부다페스트":"348","프라하":"203","키이우":"804","산티아고":"152","보고타":"170","아바나":"192","리마":"604","부에노스아이레스":"032","뉴델리":"356","오타와":"124","캔버라":"036","웰링턴":"554","아부다비":"784","야운데":"120","이슬라마바드":"586","비엔티안":"418","아크라":"288","포르토노보":"204"};
 const ARID=new Set("012 434 818 478 466 562 148 729 682 512 887 784 368 364 004 586 036 496 398 795 860 732 516 072 400 760 414 634 048".split(" "));
 const ICE=new Set(["010","304"]);
 let COUNTRIES=[],BORDERS=null,BYID={};
